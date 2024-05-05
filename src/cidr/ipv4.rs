@@ -19,7 +19,7 @@ impl Error for SyntaxError {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CIDR {
   address: u32,
   subnetmask: u8,
