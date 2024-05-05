@@ -114,7 +114,7 @@ impl Address {
     match block_number {
       1 => format!("{}", self.0.to_be()),
       4 => format!("{}", self),
-      _ => panic!("unsupported dot notation"),
+      _ => panic!("unsupported dot notation type"),
     }
   }
 }
