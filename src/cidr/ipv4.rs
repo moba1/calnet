@@ -1,11 +1,11 @@
 pub mod address;
 
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 use std::str::FromStr;
 use crate::error::SyntaxError;
 use address::Address;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct CIDR {
   address: Address,
   subnetmask: u8,
@@ -40,5 +40,11 @@ impl FromStr for CIDR {
 impl Display for CIDR {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     write!(f, "{}/{}", self.address, self.subnetmask)
+  }
+}
+
+impl Debug for CIDR {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "{}", self)
   }
 }
