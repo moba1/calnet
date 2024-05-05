@@ -107,6 +107,14 @@ impl Address {
   pub fn from_le_bytes(buf: [u8; 4]) -> Address {
     Address(u32::from_le_bytes(buf))
   }
+
+  pub const fn to_le(self) -> u32 {
+    self.0.to_le()
+  }
+
+  pub const fn to_be(self) -> u32 {
+    self.0.to_be()
+  }
 }
 
 impl Address {
