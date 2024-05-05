@@ -2,6 +2,7 @@ use regex::Regex;
 use once_cell::sync::Lazy;
 use std::error::Error;
 use std::fmt::Display;
+use std::str::FromStr;
 
 #[derive(Debug, Clone)]
 pub struct SyntaxError(String);
@@ -35,13 +36,15 @@ macro_rules! matcher {
 
 matcher!(match4, r"\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}");
 
-impl CIDR {
-  pub fn parse(cidr: &str) -> Result<Self, SyntaxError> {
-    let cidr_parts: Vec<&str> = cidr.split('/').collect();
+impl FromStr for CIDR {
+  type Err = SyntaxError;
+
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    let cidr_parts: Vec<&str> = s.split('/').collect();
     let (address, subnetmask) = match cidr_parts.len() {
-      0 | 1 => return Err(SyntaxError(format!("cannot find address / subnetmask: {}", cidr))),
+      0 | 1 => return Err(SyntaxError(format!("cannot find address / subnetmask: {}", s))),
       2 => (cidr_parts[0], cidr_parts[1]),
-      _ => return Err(SyntaxError(format!("included unknown attribute: {}", cidr))),
+      _ => return Err(SyntaxError(format!("included unknown attribute: {}", s))),
     };
 
     let subnetmask = if let Ok(subnetmask) = subnetmask.parse::<u8>() {
@@ -56,10 +59,10 @@ impl CIDR {
     let address: u32 = if match4(address) {
       parse_address4(address)?
     } else {
-      return Err(SyntaxError(format!("unsupported format: {}", cidr)))
+      return Err(SyntaxError(format!("unsupported format: {}", s)))
     };
 
-    Ok(CIDR{ address, subnetmask })
+    Ok(CIDR{ address, subnetmask })        
   }
 }
 
