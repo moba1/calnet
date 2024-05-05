@@ -48,3 +48,13 @@ impl Debug for CIDR {
     write!(f, "{}", self)
   }
 }
+
+impl CIDR {
+  pub fn address(self) -> Address {
+    self.address
+  }
+
+  pub fn subnetmask(self) -> u8 {
+    self.subnetmask
+  }
+}
