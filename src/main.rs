@@ -1,6 +1,9 @@
 pub mod cidr;
 pub mod error;
 
+use std::error::Error;
+use std::process::exit;
+
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -20,8 +23,16 @@ enum Command {
 }
 
 fn main() {
-    let arg: Args = Args::parse();
-    println!("{:?}", arg);
-    println!("{:?}", "255.128.255.255/24".parse::<cidr::ipv4::CIDR>());
-    println!("Hello, world!");
+  let arg: Args = Args::parse();
+  let exit_status = match arg.command {
+    Command::IPv4 { cidr } => calculate_ipv4_cidr(cidr),
+  };
+  if exit_status.is_err() {
+    exit(1);
+  }
+}
+
+fn calculate_ipv4_cidr(cidr: String) -> Result<(), Box<dyn Error>> {
+  println!("{:?}", cidr.parse::<cidr::ipv4::CIDR>());
+  Ok(())
 }
