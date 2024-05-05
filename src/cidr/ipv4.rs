@@ -1,23 +1,8 @@
 use regex::Regex;
 use once_cell::sync::Lazy;
-use std::error::Error;
 use std::fmt::Display;
 use std::str::FromStr;
-
-#[derive(Debug, Clone)]
-pub struct SyntaxError(String);
-
-impl Display for SyntaxError {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "invalid address notation: {}", self.0)
-  }
-}
-
-impl Error for SyntaxError {
-  fn source(&self) -> Option<&(dyn Error + 'static)> {
-    None
-  }
-}
+use crate::error::SyntaxError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CIDR {
